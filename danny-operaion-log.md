@@ -73,11 +73,26 @@ CPU: AMD Ryzen 9 3900X
         * [UEFI Shell常用命令](http://lixingcong.github.io/2018/06/12/uefi-shell/)
         * [怎样修复grub开机引导(grub rescue)](https://blog.csdn.net/seaship/article/details/96427401)
 
-#### 2022-03-28 - 2022-04-02
+#### 2022-03-28 - 2022-04-02 失败的操作
 
- 1. 失败的操作
+##### 第一次失败
 
+1. clfs 进入后，首先编译出 pacman asp，然后开始分析 archlinux 的依赖关系，将依赖关系和 clfs 中提到的顺序进行对照
+2. 开始使用 makepkg 进行编译，编译顺序是 asp checkout filesystem tz-data iana-etc linux-api-headers glibc binutils gcc ncurse readline .....
+    * 虽然说成功编译出来了 pkg.tar.gz 包，但是这些包都是不可用的，很多包中的 lib 包是依赖当前系统的。所以这种方案从最开始就是错的。
 
+##### 第二次失败
+
+1. clfs 进入后，编译出 pacman asp，分析 archlinux 依赖关系，将依赖关系和 clfs 进行对照
+2. 与第一次失败不同的是，每编译一个包直接安装到当前系统。按照依赖关系从低到高依次编译
+3. 编译顺序参考 linux-api-headers 中 pkgbuid 的顺序。 `linux-api-headers->glibc->binutils->gcc->glibc->binutils->gcc`
+    * archlinux 的依赖关系中有很多的循环依赖，并且由于 kiss 的思想，archlinux 的 lib 库有一部分是和 bin 是在一个 pkgbuid 中的，造成编译困难
+    * 编译到 systemd 的时候出现了严重的错误，这个错误我修复不了，而且当前系统已经被我替换了很多包，重启之后系统就挂掉了。
+
+##### 反思
+
+1. 其实最开始 shipujin 已经提醒我不要这么干，我也明白会出现这种问题，但是我觉得我还是要试一试。
+2. LFS 的思想是首先编译一个 `交叉工具链和临时工具` 隔离宿主机，然后在使用这套工具进行编译，这样的话就能完全隔离宿主机。
 
 ### 接下来
 
