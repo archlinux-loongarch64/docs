@@ -73,6 +73,11 @@ CPU: AMD Ryzen 9 3900X
         * [UEFI Shell常用命令](http://lixingcong.github.io/2018/06/12/uefi-shell/)
         * [怎样修复grub开机引导(grub rescue)](https://blog.csdn.net/seaship/article/details/96427401)
 
+#### 2022-03-28 - 2022-04-02
+
+ 1. 失败的操作
+
+
 
 ### 接下来
 
