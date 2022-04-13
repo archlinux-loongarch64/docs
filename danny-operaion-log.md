@@ -6,7 +6,7 @@
 
 ## 环境
 
-CPU: AMD Ryzen 9 3900X
+CPU: Loongarch64 3A5000LL 2.3Ghz
 
 ## 自己想到的做法
 
@@ -94,13 +94,33 @@ CPU: AMD Ryzen 9 3900X
 1. 其实最开始 shipujin 已经提醒我不要这么干，我也明白会出现这种问题，但是我觉得我还是要试一试。
 2. LFS 的思想是首先编译一个 `交叉工具链和临时工具` 隔离宿主机，然后在使用这套工具进行编译，这样的话就能完全隔离宿主机。
 
+#### 2022-04-02 - 2022-04-12
+
+1. 参考 linux-api-headers 的 PKGBUILD 中编译顺序我们发现，这个顺序和 lfs 中顺序相同。
+1. 查找资料，在 github 上找到了一篇关于添加 pacman 到 lfs 的介绍，开始构建自己的系统。
+2. 按照 lfs 构建一个基本的系统，走到 `7.14 清理和备份临时系统` 之后开始构建 pacman.
+3. 由于 pacman 最新版本采用的是 meson 进行构建，meson 依赖较多，所以采用文档中提到的老版本 pacman，构建完成 meson 之后再回来重新构建新版本 pacman。
+
+    * 注意事项，遇到的问题
+        * 遇到循环依赖时，按照 lfs 的顺序，适当修改 PKGBUILD 进行安装。
+        * 对于第一遍第二遍使用的所有包版本必须要完全使用一样的。
+
+    * 参考资料
+        * [benvd/lfs-pacman](https://github.com/benvd/lfs-pacman)
+        * [LFS 8.1](https://lfs-hk.koddos.net/museum/lfs-museum/8.1-systemd/LFS-BOOK-8.1-systemd.pdf)
+        * [LFS 11](https://www.linuxfromscratch.org/lfs/read.html)
+        * [用GCC-12最新版编译Linux Kernel需要用到的补丁](https://bbs.loongarch.org/d/49-gcc-12linux-kernel)
+
+#### 2022-04-12
+
+1. 在下午大约四点半左右，我即将编译完 linux 内核的时候，电脑死机，重启之后发现电脑内部一直响。经排查发现 ssd 损坏。我两个多星期的心血毁于一旦。
+2. 联系了 ssd 厂家同意换新，现在正在返厂路上。
+3. 所有的一切都要重来了。 :-(
+
+
 ### 接下来
 
-4. 尝试构建 基础系统
-    * 参考资料
-        * [build in a clean chroot](https://wiki.archlinux.org/title/DeveloperWiki:Building_in_a_clean_chroot)
-
-
+4. 重新构建系统
 
 ## 抱怨
 
@@ -108,14 +128,10 @@ qemu-loongarch64 实在是太慢了 :-( ，如果有谁愿意提供一台龙芯�
 
 斥巨资购买了龙芯电脑 :-D.
 
-## 参考资料
-
-[孙海勇老师的 clfs](https://github.com/sunhaiyong1978/CLFS-for-LoongArch)
-
-[archlinux wiki](https://wiki.archlinux.org/)
-
 ## 感谢
 
 [archlinux](https://www.archlinux.org/)
 
 [孙海勇老师的 clfs](https://github.com/sunhaiyong1978/CLFS-for-LoongArch)
+
+[LA UOSC](https://bbs.loongarch.org/)
