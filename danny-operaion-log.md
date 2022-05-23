@@ -117,10 +117,30 @@ CPU: Loongarch64 3A5000LL 2.3Ghz
 2. 联系了 ssd 厂家同意换新，现在正在返厂路上。
 3. 所有的一切都要重来了。 :-(
 
+#### 2022-04-21
+
+新 ssd 到货
+
+#### 2022-04-21 - 2022-05-23
+
+1. 由于工作太忙中间有几天没有进行研究。
+2. 将 ssd 装到另外一台电脑上，分区，下载 clfs，解压，asp checkout, git clone linux binutils glibc gcc 等。
+3. 将 ssd 装到龙芯电脑上，uefi + grub 进行引导。
+4. 按照原来的流程重新编译一遍。
+5. 自己按照 archlinux pkgbuild 编译 linux 死机，查询资料可能由于内核固件不兼容问题导致。
+6. 将 clfs 中的 acpi-initrd 和 vmlinux 复制到 /boot 中，将 linux 内核复制过来。
+7. 复制 clfs 中的 grub 中启动配置，添加一个条目，进行引导启动，键盘可以使用，但是屏幕无法显示 卡在了 loading kernel。
+8. 购买串口线进行抓 log.
+9. 串口中的信息已经正确进入 login 页面，初步判断可能是显卡驱动相关的问题。
 
 ### 接下来
 
-4. 重新构建系统
+1. 对比 clfs 中串口和当前系统串口信息，看看是不是有什么固件没有启动。
+
+    * 参考资料
+        * [串口](https://bbs.loongarch.org/d/40-3a5000clfs)
+        * [loongarch-next](https://bbs.loongarch.org/d/45-loongarch-next-linux)
+        * [gcc-12 linux kernel](https://bbs.loongarch.org/d/49-gcc-12linux-kernel)
 
 ## 抱怨
 
