@@ -43,29 +43,8 @@ CPU: Loongarch64 3A5000LL 2.3Ghz
 
 #### 2022-03-28
 
-1. 下载孙海勇老师的 clfs， 划分一个单独的磁盘并格式化为 ext4，解压 clfs 到该磁盘中，复制 `/boot/efi/BOOTLOONGARCH.efi` 到一个 uefi shell 支持的磁盘中。
-2. 进入 uefi shell 添加 efi 文件为启动项，重启选择该启动项。
-    ```UEFI
-    > fs0:
-    > bcfg boot add 8 fs0:\EFI\bootloongarch.efi "loongarch-clfs"
-    ```
-3. 进入 grub rescue 查找 grub
-    ```grub rescue
-    grub rescue> root=(hd1,gpt4)
-    grub rescue> prefix=/boot/grub
-    grub rescue> set root=(hd1,gpt4)
-    grub rescue> set prefix=(hd1,gpt4)/boot/grub
-    grub rescue> insmod normal
-    grub rescue> normal
-    ```
-4. 进入 GRUB 进行手动引导
-    ```grub
-    grub> set root=(hd1,gpt4)
-    grub> set prefix=(hd1,gpt4)/boot/grub
-    grub> linux /boot/vmlinux root=/dev/nvme0n1p4
-    grub> initrd /boot/acpi-initrd
-    grub> boot
-    ```
+1. 下载孙海勇老师的 clfs， 划分一个单独的磁盘并格式化为 ext4，解压 clfs 到该磁盘中。
+2. 引导详见  [引导](./uefi-grub.md)
 5. 稍等片刻成功进入系统，进入之后 tty1 是不能使用的，可以 `ctrl+alt+F2` 进入 `tty2` 即可正常使用。
 6. `sudo systemctl start sshd` 可开启远程 ssh, 添加用户设置密码设置 sudo 然后就可远程 ssh 连接进入该电脑。
 
@@ -130,15 +109,16 @@ CPU: Loongarch64 3A5000LL 2.3Ghz
 5. 自己按照 archlinux pkgbuild 编译 linux 死机，查询资料可能由于内核固件不兼容问题导致。
 6. 将 clfs 中的 acpi-initrd 和 vmlinux 复制到 /boot 中，将 linux 内核复制过来。
 7. 复制 clfs 中的 grub 中启动配置，添加一个条目，进行引导启动，键盘可以使用，但是屏幕无法显示 卡在了 loading kernel。
-8. 购买串口线进行抓 log.
+8. 购买串口线进行抓 log. 详见 [串口日志](./serial-port.md)
 9. 串口中的信息已经正确进入 login 页面，初步判断可能是显卡驱动相关的问题。
+10. any 包是架构无关的，一般来讲可以直接下载 x86_64 any 包直接安装。
 
 ### 接下来
 
 1. 对比 clfs 中串口和当前系统串口信息，看看是不是有什么固件没有启动。
 
     * 参考资料
-        * [串口](https://bbs.loongarch.org/d/40-3a5000clfs)
+        * [通过串口获取开机引导信息](https://bbs.loongarch.org/d/40-3a5000clfs)
         * [loongarch-next](https://bbs.loongarch.org/d/45-loongarch-next-linux)
         * [gcc-12 linux kernel](https://bbs.loongarch.org/d/49-gcc-12linux-kernel)
 
